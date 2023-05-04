@@ -76,7 +76,7 @@ def scrape_text(url: str) -> tuple[WebDriver, str, str]:
     for plugin in CFG.plugins:
         if plugin.can_handle_scrape_text(url):
             scrape_plugin = plugin
-    
+
     driver = None
     page_source = None
     if scrape_plugin is None:
