@@ -215,3 +215,25 @@ class BaseOpenAIPlugin(AutoGPTPluginTemplate):
             list: The text embedding.
         """
         pass
+
+    def can_handle_scrape_text(self, url: str) -> Tuple[str, str]:
+        """Scrape text from a website using selenium
+
+        Args:
+            url (str): The url of the website to scrape
+
+        Returns:
+            bool: True if the plugin can handle the scrape_text method.
+        """
+        return False
+
+    def handle_scrape_text(self, url: str) -> Tuple[str, str]:
+        """Scrape text from a website using selenium
+
+        Args:
+            url (str): The url of the website to scrape
+
+        Returns:
+            Tuple[str, str]: The page source and the text scraped from the website
+        """
+        pass

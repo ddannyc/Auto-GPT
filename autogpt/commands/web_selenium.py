@@ -45,7 +45,7 @@ def browse_website(url: str, question: str) -> tuple[str, WebDriver]:
         Tuple[str, WebDriver]: The answer and links to the user and the webdriver
     """
     try:
-        driver, text = scrape_text_with_selenium(url)
+        driver, page_source, text = scrape_text(url)
     except WebDriverException as e:
         # These errors are often quite long and include lots of context.
         # Just grab the first line.
@@ -54,13 +54,36 @@ def browse_website(url: str, question: str) -> tuple[str, WebDriver]:
 
     add_header(driver)
     summary_text = summary.summarize_text(url, text, question, driver)
-    links = scrape_links_with_selenium(driver, url)
+    links = scrape_links(driver, url, page_source)
 
     # Limit links to 5
     if len(links) > 5:
         links = links[:5]
     close_browser(driver)
     return f"Answer gathered from website: {summary_text} \n \n Links: {links}", driver
+
+
+def scrape_text(url: str) -> tuple[WebDriver, str, str]:
+    """Scrape text from a website using selenium or plugin
+
+    Args:
+        url (str): The url of the website to scrape
+
+    Returns:
+        Tuple[WebDriver, str, str]: The webdriver, page source and the text scraped from the website
+    """
+    scrape_plugin = None
+    for plugin in CFG.plugins:
+        if plugin.can_handle_scrape_text(url):
+            scrape_plugin = plugin
+    
+    driver = None
+    page_source = None
+    if scrape_plugin is None:
+        driver, text = scrape_text_with_selenium(url)
+    else:
+        driver, page_source, text = scrape_plugin.scrape_text(url)
+    return driver, page_source, text
 
 
 def scrape_text_with_selenium(url: str) -> tuple[WebDriver, str]:
@@ -134,8 +157,8 @@ def scrape_text_with_selenium(url: str) -> tuple[WebDriver, str]:
     return driver, text
 
 
-def scrape_links_with_selenium(driver: WebDriver, url: str) -> list[str]:
-    """Scrape links from a website using selenium
+def scrape_links(driver: WebDriver, url: str, page_source: str) -> list[str]:
+    """Scrape links from a website using selenium or page source
 
     Args:
         driver (WebDriver): The webdriver to use to scrape the links
@@ -143,7 +166,8 @@ def scrape_links_with_selenium(driver: WebDriver, url: str) -> list[str]:
     Returns:
         List[str]: The links scraped from the website
     """
-    page_source = driver.page_source
+    if driver is not None:
+        page_source = driver.page_source
     soup = BeautifulSoup(page_source, "html.parser")
 
     for script in soup(["script", "style"]):
@@ -163,7 +187,8 @@ def close_browser(driver: WebDriver) -> None:
     Returns:
         None
     """
-    driver.quit()
+    if driver is not None:
+        driver.quit()
 
 
 def add_header(driver: WebDriver) -> None:
@@ -175,6 +200,15 @@ def add_header(driver: WebDriver) -> None:
     Returns:
         None
     """
+    if driver is None:
+        return
+
+    try:
+        with open(f"{FILE_DIR}/js/header.js", "r") as header_file:
+            header_script = header_file.read()
+        driver.execute_script(header_script)
+    except Exception as e:
+        print(f"Error executing header.js: {e}")
     try:
         with open(f"{FILE_DIR}/js/overlay.js", "r") as overlay_file:
             overlay_script = overlay_file.read()
