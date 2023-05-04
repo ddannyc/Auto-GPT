@@ -82,7 +82,7 @@ def scrape_text(url: str) -> tuple[WebDriver, str, str]:
     if scrape_plugin is None:
         driver, text = scrape_text_with_selenium(url)
     else:
-        driver, page_source, text = scrape_plugin.scrape_text(url)
+        driver, page_source, text = scrape_plugin.handle_scrape_text(url)
     return driver, page_source, text
 
 
