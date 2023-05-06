@@ -114,7 +114,7 @@ def scrape_text_with_selenium(url: str) -> tuple[WebDriver, str]:
             options.add_argument("--disable-gpu")
         
         if CFG.selenium_binary_path:
-            options.binary_location = Path(CFG.selenium_binary_path)
+            options.binary_location = CFG.selenium_binary_path
 
         chromium_driver_path = Path(CFG.selenium_driver_path)
 
