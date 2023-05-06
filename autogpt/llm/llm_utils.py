@@ -269,7 +269,7 @@ def create_embedding(
     chunk_lengths = []
     embedding_plugin = None
     for plugin in cfg.plugins:
-        if plugin.can_handle_text_embedding():
+        if plugin.can_handle_text_embedding(text):
             embedding_plugin = plugin
             break
 
