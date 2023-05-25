@@ -91,6 +91,7 @@ def main(
             continuous,
             continuous_limit,
             ai_settings,
+            "",
             skip_reprompt,
             speak,
             debug,
