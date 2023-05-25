@@ -49,3 +49,4 @@ class PromptConfig:
         self.constraints = config_params.get("constraints", [])
         self.resources = config_params.get("resources", [])
         self.performance_evaluations = config_params.get("performance_evaluations", [])
+        self.config_params = config_params

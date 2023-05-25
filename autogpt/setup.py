@@ -14,6 +14,7 @@ from autogpt.prompts.default_prompts import (
     DEFAULT_TASK_PROMPT_AICONFIG_AUTOMATIC,
     DEFAULT_USER_DESIRE_PROMPT,
 )
+from autogpt.config.prompt_config import PromptConfig
 
 CFG = Config()
 
@@ -63,6 +64,7 @@ def prompt_user() -> AIConfig:
         try:
             return generate_aiconfig_automatic(user_desire)
         except Exception as e:
+            logger.debug(e)
             logger.typewriter_log(
                 "Unable to automatically generate AI Config based on user desire.",
                 Fore.RED,
@@ -170,9 +172,10 @@ def generate_aiconfig_automatic(user_prompt) -> AIConfig:
     AIConfig: The AIConfig object tailored to the user's input
     """
 
-    system_prompt = DEFAULT_SYSTEM_PROMPT_AICONFIG_AUTOMATIC
+    prompt_config = PromptConfig()
+    system_prompt = prompt_config.config_params.get("default_system_prompt_aiconfig_automatic", "")
     prompt_ai_config_automatic = Template(
-        DEFAULT_TASK_PROMPT_AICONFIG_AUTOMATIC
+        prompt_config.config_params.get("default_task_prompt_aiconfig_automatic", "")
     ).render(user_prompt=user_prompt)
     # Call LLM with the string as user input
     messages = [

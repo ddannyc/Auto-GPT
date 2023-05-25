@@ -125,9 +125,9 @@ class AIConfig:
         """
 
         prompt_start = (
-            "Your decisions must always be made independently without"
-            " seeking user assistance. Play to your strengths as an LLM and pursue"
-            " simple strategies with no legal complications."
+            "你的决定必须始终独立作出,而不寻求用户帮助。"
+            " 发挥你作为LLM 的优势,"
+            " 采取简单的策略,没有法律上的复杂性。"
             ""
         )
 
