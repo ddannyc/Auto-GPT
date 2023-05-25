@@ -109,7 +109,7 @@ class Agent:
                 )
                 break
             # Send message to AI, get response
-            with Spinner("Thinking... "):
+            with Spinner("思考中... "):
                 assistant_reply = chat_with_ai(
                     self,
                     self.system_prompt,
@@ -150,10 +150,10 @@ class Agent:
             )
 
             logger.typewriter_log(
-                "NEXT ACTION: ",
+                "下一步: ",
                 Fore.CYAN,
-                f"COMMAND = {Fore.CYAN}{command_name}{Style.RESET_ALL}  "
-                f"ARGUMENTS = {Fore.CYAN}{arguments}{Style.RESET_ALL}",
+                f"指令 = {Fore.CYAN}{command_name}{Style.RESET_ALL}  "
+                f"参数 = {Fore.CYAN}{arguments}{Style.RESET_ALL}",
             )
 
             if not cfg.continuous_mode and self.next_action_count == 0:
@@ -162,8 +162,8 @@ class Agent:
                 # to exit
                 self.user_input = ""
                 logger.info(
-                    "Enter 'y' to authorise command, 'y -N' to run N continuous commands, 's' to run self-feedback commands, "
-                    "'n' to exit program, or enter feedback for "
+                    "输入'y'授权命令,'y -N'运行N个连续命令,'s'运行自反馈命令, "
+                    "'n'退出程序,或输入反馈意见 "
                     f"{self.ai_name}..."
                 )
                 while True:
