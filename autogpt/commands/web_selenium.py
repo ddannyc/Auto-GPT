@@ -124,7 +124,10 @@ def scrape_text_with_selenium(url: str, config: Config) -> tuple[WebDriver, str]
             options.add_argument("--headless=new")
             options.add_argument("--disable-gpu")
 
-        chromium_driver_path = Path("/usr/bin/chromedriver")
+        if config.selenium_binary_path:
+            options.binary_location = config.selenium_binary_path
+
+        chromium_driver_path = Path(config.selenium_driver_path)
 
         driver = ChromeDriver(
             service=ChromeDriverService(str(chromium_driver_path))
