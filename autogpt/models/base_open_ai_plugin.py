@@ -211,7 +211,6 @@ class BaseOpenAIPlugin(AutoGPTPluginTemplate):
         Returns:
             list: The text embedding.
         """
-        pass
 
     def can_handle_user_input(self, user_input: str) -> bool:
         """This method is called to check that the plugin can
@@ -248,20 +247,3 @@ class BaseOpenAIPlugin(AutoGPTPluginTemplate):
         Args:
             message (str): The message to report.
         """
-
-    def can_handle_api_get_models(self) -> bool:
-        """This method is called to check that the plugin can
-          handle the api_manager#get_models method.
-          Returns:
-              bool: True if the plugin can handle the api_manager#get_models method."""
-        return False
-
-    def handle_api_get_models(self) -> list:
-        """
-        Get list of available GPT models through plugin.
-
-        Returns:
-        list: List of available GPT models.
-
-        """
-        pass
